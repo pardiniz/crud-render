@@ -26,7 +26,7 @@ app.get("/create-table", async (req, res) => {
         idade INT
       );
     `);
-    res.send("✅ Tabela 'alunos' criada com sucesso!");
+    res.send(" Tabela 'alunos' criada com sucesso!");
   } catch (err) {
     console.error("Erro ao criar tabela:", err);
     res.status(500).send("Erro ao criar tabela");
@@ -37,8 +37,8 @@ app.get("/create-table", async (req, res) => {
 app.post("/alunos", async (req, res) => {
   const { nome, idade } = req.body;
   try {
-    await pool.query("INSERT INTO aluno (nome, idade) VALUES ($1, $2)", [nome, idade]);
-    res.send("✅ Aluno cadastrado com sucesso!");
+    await pool.query("INSERT INTO alunos (nome, idade) VALUES ($1, $2)", [nome, idade]);
+    res.send("✅ Alunos cadastrados com sucesso!");
   } catch (err) {
     console.error("Erro ao cadastrar:", err);
     res.status(500).send("Erro ao cadastrar aluno");
@@ -48,7 +48,7 @@ app.post("/alunos", async (req, res) => {
 // 📖 READ
 app.get("/alunos", async (req, res) => {
   try {
-    const result = await pool.query("SELEC * FROM alunos ORDER BY id ASC");
+    const result = await pool.query("SELECT * FROM alunos ORDER BY id ASC");
     res.json(result.rows);
   } catch (err) {
     console.error("Erro ao listar:", err);
@@ -61,7 +61,7 @@ app.put("/alunos/:id", async (req, res) => {
   const { id } = req.params;
   const { nome, idade } = req.body;
   try {
-    await pool.query("UPDAT alunos SET nome=$1, idades=$2 WHERE id=$3", [nome, idade, id]);
+    await pool.query("UPDATE alunos SET nome=$1, idade=$2 WHERE id=$3", [nome, idade, id]);
     res.send("✏️ Aluno atualizado com sucesso!");
   } catch (err) {
     console.error("Erro ao atualizar:", err);
@@ -73,7 +73,7 @@ app.put("/alunos/:id", async (req, res) => {
 app.delete("/alunos/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    await pool.query("DELETE FROM alunos WHEE id=$1", [id]);
+    await pool.query("DELETE FROM alunos WHERE id=$1", [id]);
     res.send("🗑️ Aluno excluído com sucesso!");
   } catch (err) {
     console.error("Erro ao excluir:", err);
