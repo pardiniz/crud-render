@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
 const path = require("path");
+const { error } = require("console");
 require("dotenv").config();
 
 const app = express();
@@ -17,7 +18,7 @@ const pool = new Pool({
 });
 
 // 🧱 Criar tabela (executar 1x)
-app.get("/create-table", async (req, res) => {
+app.get("/created-table", async (req, res) => {
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS alunos (
@@ -28,7 +29,7 @@ app.get("/create-table", async (req, res) => {
     `);
     res.send(" Tabela 'alunos' criada com sucesso!");
   } catch (err) {
-    console.error("Erro ao criar tabela:", err);
+    console.error("Erro ao criar tabela:", error);
     res.status(500).send("Erro ao criar tabela");
   }
 });
@@ -40,7 +41,7 @@ app.post("/alunos", async (req, res) => {
     await pool.query("INSERT INTO alunos (nome, idade) VALUES ($1, $2)", [nome, idade]);
     res.send("✅ Alunos cadastrados com sucesso!");
   } catch (err) {
-    console.error("Erro ao cadastrar:", err);
+    console.error("Erro ao cadastrar:", error);
     res.status(500).send("Erro ao cadastrar aluno");
   }
 });
@@ -51,7 +52,7 @@ app.get("/alunos", async (req, res) => {
     const result = await pool.query("SELECT * FROM alunos ORDER BY id ASC");
     res.json(result.rows);
   } catch (err) {
-    console.error("Erro ao listar:", err);
+    console.error("Erro ao listar:", error);
     res.status(500).send("Erro ao listar alunos");
   }
 });
@@ -64,7 +65,7 @@ app.put("/alunos/:id", async (req, res) => {
     await pool.query("UPDATE alunos SET nome=$1, idade=$2 WHERE id=$3", [nome, idade, id]);
     res.send("✏️ Aluno atualizado com sucesso!");
   } catch (err) {
-    console.error("Erro ao atualizar:", err);
+    console.error("Erro ao atualizar:", error);
     res.status(500).send("Erro ao atualizar aluno");
   }
 });
@@ -76,7 +77,7 @@ app.delete("/alunos/:id", async (req, res) => {
     await pool.query("DELETE FROM alunos WHERE id=$1", [id]);
     res.send("🗑️ Aluno excluído com sucesso!");
   } catch (err) {
-    console.error("Erro ao excluir:", err);
+    console.error("Erro ao excluir:", error);
     res.status(500).send("Erro ao excluir aluno");
   }
 });
